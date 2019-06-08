@@ -2,12 +2,6 @@
 
 $app->path('movebetweencollections', __DIR__);
 
-/**
- * register routes
- */
-require_once(__DIR__ . '/Controller/MoveBetweenCollections.php');
-$app->bindClass('Cockpit\\Controller\\MoveBetweenCollections', 'movebetweencollections');
-
 $this->on('collections.entry.aside', function() {
     $current_collection = explode('/', $this->module('cockpit')->app->registry['route'])[3]; // TODO
     $this->renderView("movebetweencollections:views/ce-aside.php", [
@@ -16,4 +10,13 @@ $this->on('collections.entry.aside', function() {
     ]);
 });
 
-$app('admin')->init();
+// ADMIN
+if (COCKPIT_ADMIN && !COCKPIT_API_REQUEST) {
+    /**
+     * register routes
+     */
+    require_once(__DIR__ . '/Controller/MoveBetweenCollections.php');
+    $app->bindClass('Cockpit\\Controller\\MoveBetweenCollections', 'movebetweencollections');
+
+    $app('admin')->init();
+}
